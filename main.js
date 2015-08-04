@@ -7,7 +7,6 @@ var http    = require('http'),
 
 var s3;
 var baseURL = 'http://www.actuaries.digital/';
-var body = '';
 
 function postToTwitter(title, fullLink, hash) {
   var client = new twitter(
@@ -41,6 +40,7 @@ exports.handler = function(events, contrext) {
     AWS.config.loadFromPath('./credentials_aws.json');
     s3 = new AWS.S3({params: {Bucket: 'actdigstream'} });
     
+    var body = '';
     console.log("About to make HTTP request");
     http.get(baseURL, function (res) {
       console.log("Got response: " + res.statusCode);

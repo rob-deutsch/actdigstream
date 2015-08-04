@@ -13,7 +13,7 @@ function postToTwitter(title, fullLink, hash) {
     JSON.parse(fs.readFileSync('./credentials_twitter.json', 'ascii'))
   );
   client.post('statuses/update', {status: title + " " + fullLink}, function(err, tweet, response) {
-    if (err) console.log("Twitter error: " + JSON.stringify(err)));
+    if (err) console.log("Twitter error: " + JSON.stringify(err));
     else {
       console.log('Twitter success:' + tweet.text);
       markOnS3(hash);

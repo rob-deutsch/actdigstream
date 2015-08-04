@@ -5,6 +5,7 @@ var http    = require('http'),
     fs      = require('fs'),
     twitter = require('twitter');
 
+var s3;
 var baseURL = 'http://www.actuaries.digital/';
 var body = '';
 
@@ -24,12 +25,12 @@ function postToTwitter(title, fullLink, hash) {
 function markOnS3(hash) {
   // Mark it on S3
   var params = {
-    Key: path,
+    Key: hash,
     Body: 'Article'
   };
   s3.putObject(params, function(err, data) {
     if (err) console.log(err)
-    else console.log("Successful marked on S3: " + path);
+    else console.log("Successful marked on S3: " + hash);
   });
 }
 
@@ -38,7 +39,7 @@ exports.handler = function(events, contrext) {
 
     // Get AWS credentials and setup S3
     AWS.config.loadFromPath('./credentials_aws.json');
-    var s3 = new AWS.S3({params: {Bucket: 'actdigstream'} });
+    s3 = new AWS.S3({params: {Bucket: 'actdigstream'} });
     
     console.log("About to make HTTP request");
     http.get(baseURL, function (res) {

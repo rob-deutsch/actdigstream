@@ -72,4 +72,4 @@ exports.handler = function(events, contrext) {
     });
 };
 
-exports.handler(null, null);
+//exports.handler(null, null);

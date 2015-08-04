@@ -8,12 +8,6 @@ var http    = require('http'),
 var baseURL = 'http://www.actuaries.digital/';
 var body = '';
 
-console.log("Starting function");
-
-// Get AWS credentials and setup S3
-AWS.config.loadFromPath('./credentials_aws.json');
-var s3 = new AWS.S3({params: {Bucket: 'actdigstream'} });
-
 function postToTwitter(title, fullLink, hash) {
   var client = new twitter(
     JSON.parse(fs.readFileSync('./credentials_twitter.json', 'ascii'))
@@ -39,32 +33,42 @@ function markOnS3(hash) {
   });
 }
 
-console.log("About to make HTTP request");
-http.get(baseURL, function (res) {
-  console.log("Got response: " + res.statusCode);
-  // Save all of the chunks to body as they arive
-  res.on('data', function(chunk) {
-    body += chunk;
-  });
-  // When everything has arrived...
-  res.on('end', function() {
-    // Load the HTML into cheery and execute over articles
-    $ = cheerio.load(body);
-    $('.post-list-item').find('h2').find('a').each(function(i, elem) {
-      // Need double list so that it isn't fully unpacked
-      var title    = $(this).text(),
-          href     = $(this).attr('href'),
-          fullLink = url.resolve(baseURL, $(this).attr('href')),
-          path     =  url.parse(fullLink)['path'].substring(1);
-     // Check to see if this exists on S3
-      s3.headObject({Key: path}, function(err, data) {
-        // If doesn't exist on S3 post it to Twitter...
-        if (err) postToTwitter(title, fullLink, path)
-        // If exists on S3...
-        else console.log("Already exists: " + path);
+exports.handler = function(events, contrext) {
+    console.log("Starting function");
+
+    // Get AWS credentials and setup S3
+    AWS.config.loadFromPath('./credentials_aws.json');
+    var s3 = new AWS.S3({params: {Bucket: 'actdigstream'} });
+    
+    console.log("About to make HTTP request");
+    http.get(baseURL, function (res) {
+      console.log("Got response: " + res.statusCode);
+      // Save all of the chunks to body as they arive
+      res.on('data', function(chunk) {
+        body += chunk;
       });
+      // When everything has arrived...
+      res.on('end', function() {
+        // Load the HTML into cheery and execute over articles
+        $ = cheerio.load(body);
+        $('.post-list-item').find('h2').find('a').each(function(i, elem) {
+          // Need double list so that it isn't fully unpacked
+          var title    = $(this).text(),
+              href     = $(this).attr('href'),
+              fullLink = url.resolve(baseURL, $(this).attr('href')),
+              path     =  url.parse(fullLink)['path'].substring(1);
+         // Check to see if this exists on S3
+          s3.headObject({Key: path}, function(err, data) {
+            // If doesn't exist on S3 post it to Twitter...
+            if (err) postToTwitter(title, fullLink, path)
+            // If exists on S3...
+            else console.log("Already exists: " + path);
+          });
+        });
+      });
+    }).on('error', function(e) {
+      console.log("Got error: " + e.message);
     });
-  });
-}).on('error', function(e) {
-  console.log("Got error: " + e.message);
-});
+};
+
+exports.handler(null, null);

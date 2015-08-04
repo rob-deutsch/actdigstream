@@ -11,19 +11,18 @@ http.get(baseURL, function (res) {
     body += chunk;
   });
   res.on('end', function() {
+    AWS.config.loadFromPath('./credentials.json');
+    var s3 = new AWS.S3({params: {Bucket: 'awsdigstream'} });
     $ = cheerio.load(body);
     var test = $('.post-list-item').find('h2').find('a').map(function(i, elem) {
       // Need double list so that it isn't fully unpacked
-      return {
-        title: $(this).text(), 
-        href: $(this).attr('href'),
-        fullLink: url.resolve(baseURL, $(this).attr('href')),
-        path: url.parse(url.resolve(baseURL, $(this).attr('href')))['path']
+      var title    = $(this).text(),
+          href     = $(this).attr('href'),
+          fullLink = url.resolve(baseURL, $(this).attr('href')),
+          path     =  url.parse(url.resolve(baseURL, $(this).attr('href')))['path'];
+      console.log([title, href, fullLink, path]);
       };
     });
-    AWS.config.loadFromPath('./credentials.json');
-    var s3 = new AWS.S3({params: {Bucket: 'awsdigstream'} });
-    console.log(test.get());
   });
 }).on('error', function(e) {
   console.log("Got error: " + e.message);

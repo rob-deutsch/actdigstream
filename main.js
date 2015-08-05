@@ -33,8 +33,11 @@ function markOnS3(hash) {
   });
 }
 
-exports.handler = function(events, contrext) {
+exports.handler = function(event, context) {
     console.log("Starting function");
+    
+    console.log(event);
+    if (event.type != "chime") context.succeed("Not a chimevent");
 
     // Get AWS credentials and setup S3
     AWS.config.loadFromPath('./credentials_aws.json');

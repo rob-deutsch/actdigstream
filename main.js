@@ -35,9 +35,18 @@ function markOnS3(hash) {
 
 exports.handler = function(event, context) {
     console.log("Starting function");
-    
-    console.log(event);
-    if (event.type != "chime") context.succeed("Not a chimevent");
+    console.log(JSON.stringify(event));
+    event = JSON.parse(event.Records[0].Sns.Message);
+    console.log(JSON.stringify(event));
+    event.minute = parseInt(event.minute);
+    event.hour = parseInt(event.hour)
+    if (event.type != "chime" 
+        || event.minute != 0
+        || event.hour < (8-10+24) // Convert 8AM AEST to UTC
+        || event.hour > (19-10)   // Convert 7PM AEST to UTC
+    {
+      context.succeed("Not a chime event");
+    };
 
     // Get AWS credentials and setup S3
     AWS.config.loadFromPath('./credentials_aws.json');

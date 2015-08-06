@@ -5,6 +5,8 @@ Checks http://actuaries.digital and posts new articles to the @actdigstream Twit
 
 Licensed under GPLv2 for the US. Licenced under GPLv2 for Britain and other countries that use proper English. 
 
+# Requirements
+
 Utilises AWS and node.js.
 
 Requires the following file to be available in the root directory:

@@ -5,9 +5,10 @@ var http    = require('http'),
     fs      = require('fs'),
     twitter = require('twitter');
 
-var s3;
+var s3; // This variable is accessed in a couple of functions
 var baseURL = 'http://www.actuaries.digital/';
 
+// Make a post to twitter. Unique hash as an arguement so that we can mark that its been posted.
 function postToTwitter(title, fullLink, hash) {
   var client = new twitter(
     JSON.parse(fs.readFileSync('./credentials_twitter.json', 'ascii'))
@@ -21,6 +22,7 @@ function postToTwitter(title, fullLink, hash) {
   });
 };
 
+// Mark the existence of the hash, on S3. Can use this later to check if a hash has been seen before.
 function markOnS3(hash) {
   // Mark it on S3
   var params = {

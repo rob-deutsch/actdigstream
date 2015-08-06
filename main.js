@@ -33,7 +33,7 @@ function markOnS3(hash) {
     if (err) console.log(err)
     else console.log("Successful marked on S3: " + hash);
   });
-}
+};
 
 exports.handler = function(event, context) {
     console.log("Starting function");

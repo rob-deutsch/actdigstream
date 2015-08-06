@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+echo "This deployment script is ugly. You should probably only use it if you've read an understood the whole thing. Sorry."
+
 current_time=$(date "+%Y%m%d-%H%M")
 deploy_filename="aws_deploy/$current_time-upload.zip"
 

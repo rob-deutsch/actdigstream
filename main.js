@@ -64,10 +64,10 @@ exports.handler = function(event, context) {
       });
       // When everything has arrived...
       res.on('end', function() {
-        // Load the HTML into cheery and execute over articles
+        // Load the HTML into cheerio and execute over articles
         $ = cheerio.load(body);
         $('.post-list-item').find('h2').find('a').each(function(i, elem) {
-          // Need double list so that it isn't fully unpacked
+          // Grab each important piece of info from each item
           var title    = $(this).text(),
               href     = $(this).attr('href'),
               fullLink = url.resolve(baseURL, $(this).attr('href')),

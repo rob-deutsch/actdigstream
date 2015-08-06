@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "This deployment script is ugly. You should probably only use it if you've read an understood the whole thing. Sorry."
+echo "This deployment script is ugly. You should probably only use it if you've read and understood the whole thing. Sorry."
 echo "This script will now exit without doing anything."
 exit 0
 

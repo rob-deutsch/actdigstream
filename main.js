@@ -71,7 +71,7 @@ exports.handler = function(event, context) {
           var title    = $(this).text(),
               href     = $(this).attr('href'),
               fullLink = url.resolve(baseURL, $(this).attr('href')),
-              path     =  url.parse(fullLink)['path'].substring(1);
+              path     =  url.parse(fullLink)['path'].substring(1); // To be used as a hash
          // Check to see if this exists on S3
           s3.headObject({Key: path}, function(err, data) {
             // If doesn't exist on S3 post it to Twitter...

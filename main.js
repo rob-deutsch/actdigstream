@@ -41,14 +41,17 @@ exports.handler = function(event, context) {
     event = JSON.parse(event.Records[0].Sns.Message);
     console.log(JSON.stringify(event));
     event.minute = parseInt(event.minute);
-    event.hour = parseInt(event.hour)
+    event.hour = parseInt(event.hour);
     if (event.type != "chime" 
         || event.minute != 0
-        || event.hour < (8-10+24) // Convert 8AM AEST to UTC
-        || event.hour > (19-10)   // Convert 7PM AEST to UTC
+        ||(    event.hour < (8-10+24) // Convert 8AM AEST to UTC
+            && event.hour > (19-10)   // Convert 7PM AEST to UTC
+          )
     )
     {
+      console.log("Not a chime event");
       context.succeed("Not a chime event");
+      process.exit();
     };
 
     // Get AWS credentials and setup S3

@@ -1,7 +1,7 @@
 # actdigstream
 Unofficial Actuaries Digital Twitter stream
 
-Checks http://actuaries.digital and posts new articles to the @actdigstream Twitter account.
+Checks http://actuaries.digital and posts new articles to the [@actdigstream](https://twitter.com/actdigstream) Twitter account.
 
 Licensed under GPLv2 for the US. Licenced under GPLv2 for Britain and other countries that use proper English. 
 

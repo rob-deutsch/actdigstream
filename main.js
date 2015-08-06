@@ -46,6 +46,7 @@ exports.handler = function(event, context) {
         || event.minute != 0
         || event.hour < (8-10+24) // Convert 8AM AEST to UTC
         || event.hour > (19-10)   // Convert 7PM AEST to UTC
+    )
     {
       context.succeed("Not a chime event");
     };
